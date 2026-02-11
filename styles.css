@@ -38,8 +38,8 @@ header p {
     background: rgba(255,255,255,0.2);
     border-radius: 6px;
     margin-top: 1rem;
-    transition: background 0.3s;
     font-weight: 500;
+    animation: pulseNav 2s ease-in-out infinite;
 }
 
 .nav-link:hover {
@@ -229,7 +229,7 @@ main {
     font-weight: 600;
     font-size: 1.05rem;
     margin-top: 2rem;
-    transition: all 0.3s;
+    animation: pulseCta 2s ease-in-out infinite;
 }
 
 .cta-button:hover {
@@ -296,7 +296,7 @@ main {
     font-size: 1.3rem;
     font-weight: bold;
     margin-top: 1.5rem;
-    transition: all 0.3s;
+    animation: pulseCtaLarge 2s ease-in-out infinite;
 }
 
 .cta-button-large:hover {
@@ -324,6 +324,21 @@ footer a {
 
 footer a:hover {
     color: #8b9eea;
+}
+
+@keyframes pulseNav {
+    0%, 100% { background: rgba(255,255,255,0.2); color: white; }
+    50% { background: white; color: #764ba2; }
+}
+
+@keyframes pulseCta {
+    0%, 100% { background: #667eea; color: white; }
+    50% { background: white; color: #667eea; }
+}
+
+@keyframes pulseCtaLarge {
+    0%, 100% { background: white; color: #667eea; }
+    50% { background: #667eea; color: white; }
 }
 
 @media (max-width: 768px) {
