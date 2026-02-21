@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture — RetireSIM.ai | Deterministic Computation Meets AI Narration</title>
+    <meta name="description" content="RetireSIM.ai architecture: 600,000 Monte Carlo scenarios with deterministic computation, What-If Heat Maps, and AI-powered narrative reports. Every number traceable, auditable, reproducible.">
+    <meta name="keywords" content="Monte Carlo simulation architecture, retirement planning AI, deterministic computation, financial risk management, Claude API retirement, What-If Heat Maps, retirement planning Singapore CPF">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #08070e;
+            --bg-card: #0f0d1a;
+            --bg-card-hover: #151225;
+            --border: rgba(139, 92, 246, 0.15);
+            --border-active: rgba(139, 92, 246, 0.4);
+            --purple-300: #c4b5fd;
+            --purple-400: #a78bfa;
+            --purple-500: #8b5cf6;
+            --purple-600: #7c3aed;
+            --green-400: #4ade80;
+            --green-500: #22c55e;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --cyan-400: #22d3ee;
+            --rose-400: #fb7185;
+            --text-primary: #f1f0f5;
+            --text-secondary: #a8a3b5;
+            --text-muted: #6b6580;
+            --glow-purple: rgba(139, 92, 246, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAV */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(8, 7, 14, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav__brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700; font-size: 1.05rem;
+            color: var(--purple-400);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        .nav__brand span { color: var(--text-muted); font-weight: 400; }
+        .nav__links { display: flex; gap: 0.25rem; list-style: none; }
+        .nav__links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            padding: 0.4rem 0.85rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .nav__links a:hover { color: var(--text-primary); background: rgba(139,92,246,0.08); }
+        .nav__links a.active { color: var(--purple-300); background: rgba(139,92,246,0.12); }
+        .nav__cta {
+            background: var(--purple-600) !important;
+            color: #fff !important;
+            font-weight: 600;
+            padding: 0.4rem 1rem !important;
+        }
+        .nav__cta:hover { background: var(--purple-500) !important; }
+
+        /* HERO */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+        .hero__tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--purple-400);
+            margin-bottom: 1.25rem;
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards 0.1s;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards 0.2s;
+        }
+        .hero h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--purple-400), var(--cyan-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero__sub {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards 0.35s;
+        }
+
+        /* CONTENT */
+        .content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        /* PRINCIPLE QUOTE */
+        .principle {
+            border-left: 3px solid var(--purple-500);
+            background: var(--glow-purple);
+            padding: 1.5rem 2rem;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 4rem;
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards 0.5s;
+        }
+        .principle blockquote {
+            font-size: 1.05rem;
+            font-style: italic;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .principle cite {
+            font-style: normal;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* FLOW SECTION */
+        .flow { margin-bottom: 3.5rem; }
+        .flow__label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .flow__desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.25rem;
+        }
+
+        /* CARDS */
+        .cards { display: grid; gap: 1rem; }
+        .cards--3 { grid-template-columns: repeat(3, 1fr); }
+        .cards--2 { grid-template-columns: repeat(2, 1fr); }
+        .cards--1 { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .card:hover {
+            border-color: var(--border-active);
+            transform: translateY(-2px);
+        }
+        .card__icon {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 0.85rem;
+        }
+        .card__icon--purple { background: rgba(139,92,246,0.15); }
+        .card__icon--green { background: rgba(34,197,94,0.15); }
+        .card__icon--amber { background: rgba(245,158,11,0.15); }
+        .card__icon--cyan { background: rgba(34,211,238,0.15); }
+        .card__icon--rose { background: rgba(251,113,133,0.15); }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.01em;
+        }
+        .card p {
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        /* TAGS */
+        .tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            margin-top: 0.75rem;
+        }
+        .tag--green { background: rgba(34,197,94,0.15); color: var(--green-400); }
+        .tag--amber { background: rgba(245,158,11,0.15); color: var(--amber-400); }
+        .tag--cyan { background: rgba(34,211,238,0.15); color: var(--cyan-400); }
+        .tag--purple { background: rgba(139,92,246,0.15); color: var(--purple-400); }
+        .tag--rose { background: rgba(251,113,133,0.15); color: var(--rose-400); }
+
+        /* DIVIDER */
+        .divider {
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; top: 50%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-active), transparent);
+        }
+        .divider__label {
+            position: relative;
+            display: inline-block;
+            background: var(--bg-deep);
+            padding: 0.6rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--amber-400);
+            border: 1px solid rgba(245,158,11,0.3);
+            border-radius: 100px;
+        }
+
+        /* CONNECTOR ARROWS */
+        .connector {
+            text-align: center;
+            padding: 1.25rem 0;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+        }
+        .footer a { color: var(--purple-300); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .footer p { margin: 0.25rem 0; }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav__links { display: none; }
+            .hero { padding: 7rem 1.5rem 3rem; }
+            .content { padding: 0 1.5rem 4rem; }
+            .cards--3, .cards--2 { grid-template-columns: 1fr; }
+            .principle { padding: 1.25rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="https://case-studies.retiresim.ai/" class="nav__brand">RetireSIM<span>.ai</span></a>
+    <ul class="nav__links">
+        <li><a href="https://case-studies.retiresim.ai/">Case Studies</a></li>
+        <li><a href="#" class="active">Architecture</a></li>
+        <li><a href="https://www.retiresim.ai" target="_blank" class="nav__cta">Launch Simulator</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <div class="hero__tag">System Architecture</div>
+    <h1>Deterministic computation meets <em>AI narration</em></h1>
+    <p class="hero__sub">Every number is traceable, auditable, and reproducible. The engine handles the maths. The LLM handles the narrative.</p>
+</section>
+
+<div class="content">
+
+    <!-- Architecture Principle -->
+    <div class="principle">
+        <blockquote>"Give AI facts to explain, not problems to solve. The engine handles the maths. The LLM handles the narrative. Every number is traceable, auditable, and reproducible."</blockquote>
+        <cite>— Architecture principle</cite>
+    </div>
+
+    <!-- LAYER 1: USER INPUTS -->
+    <section class="flow reveal">
+        <div class="flow__label">01 — User Inputs</div>
+        <p class="flow__desc">Three categories of inputs define a retirement scenario. Everything the simulation needs comes from the user — no hidden assumptions.</p>
+        <div class="cards cards--3">
+            <div class="card">
+                <div class="card__icon card__icon--purple">📊</div>
+                <h3>Portfolio Weights</h3>
+                <p>Asset class allocations across equities, bonds, real estate, commodities, and cash.</p>
+            </div>
+            <div class="card">
+                <div class="card__icon card__icon--green">💰</div>
+                <h3>Cash Flows</h3>
+                <p>Income streams, pension, CPF, SRS, annuities, planned withdrawals &amp; expenses.</p>
+            </div>
+            <div class="card">
+                <div class="card__icon card__icon--amber">⚙️</div>
+                <h3>Parameters</h3>
+                <p>Retirement age, horizon, inflation, tax rules, risk tolerance, asset correlations, expected returns.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="connector reveal">↓</div>
+
+    <!-- LAYER 2: COMPUTATION ENGINE -->
+    <section class="flow reveal">
+        <div class="flow__label">02 — Computation Engine</div>
+        <p class="flow__desc">All calculations are deterministic and reproducible. Given the same inputs, the engine produces identical outputs every time — no AI involved at this stage.</p>
+        <div class="cards cards--2">
+            <div class="card">
+                <div class="card__icon card__icon--cyan">🔄</div>
+                <h3>Monte Carlo Simulation</h3>
+                <p>600,000 scenarios with correlated asset returns, inflation modelling, and cash flow projections.</p>
+                <span class="tag tag--green">Deterministic</span>
+            </div>
+            <div class="card">
+                <div class="card__icon card__icon--rose">🔥</div>
+                <h3>What-If Heat Maps</h3>
+                <p>Two-dimensional optimisation across allocation × withdrawal rates showing full solution space.</p>
+                <span class="tag tag--green">Deterministic</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="connector reveal">↓</div>
+
+    <!-- LAYER 3: PRE-CALCULATED RESULTS -->
+    <section class="flow reveal">
+        <div class="flow__label">03 — Pre-Calculated Results</div>
+        <p class="flow__desc">The engine packages results into a structured data object. This is the single source of truth — success probabilities, percentile outcomes, risk metrics, cash flow tables, and chart data. No opinions. Only facts.</p>
+        <div class="cards cards--1">
+            <div class="card" style="border-color: rgba(34,211,238,0.3);">
+                <div class="card__icon card__icon--cyan">📋</div>
+                <h3>PublishMyPlan</h3>
+                <p>Structured data package: success probabilities, percentile outcomes, risk metrics, cash flow tables, charts.</p>
+                <span class="tag tag--cyan">Facts, not opinions</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="divider reveal">
+        <div class="divider__label">↑ Deterministic &amp; Auditable · AI Narration ↓</div>
+    </div>
+
+    <!-- LAYER 4: AI NARRATIVE LAYER -->
+    <section class="flow reveal">
+        <div class="flow__label">04 — AI Narrative Layer</div>
+        <p class="flow__desc">Pre-calculated results are passed to the LLM with strict guardrails. The prompt engineering enforces a clear boundary: explain these facts — do not infer, do not hallucinate, do not add data.</p>
+        <div class="cards cards--2">
+            <div class="card">
+                <div class="card__icon card__icon--amber">📝</div>
+                <h3>Prompt Engineering</h3>
+                <p>Strict instructions: explain these facts, do not infer, do not hallucinate, do not add data.</p>
+                <span class="tag tag--amber">Guardrailed</span>
+            </div>
+            <div class="card">
+                <div class="card__icon card__icon--purple">🤖</div>
+                <h3>LLM API</h3>
+                <p>Claude Opus receives pre-calculated results + prompt. Returns narrative report with enhanced explanations.</p>
+                <span class="tag tag--purple">AI-Powered</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="connector reveal">↓</div>
+
+    <!-- LAYER 5: CLIENT DELIVERABLE -->
+    <section class="flow reveal">
+        <div class="flow__label">05 — Client Deliverable</div>
+        <p class="flow__desc">The final report combines deterministic charts, tables, and data with AI-generated narrative insights — institutional quality, retail accessible.</p>
+        <div class="cards cards--1">
+            <div class="card" style="border-color: rgba(139,92,246,0.3);">
+                <div class="card__icon card__icon--purple">📄</div>
+                <h3>AI-Enhanced Retirement Report</h3>
+                <p>Professional wealth management report combining deterministic charts, tables &amp; data with AI-generated narrative insights — institutional quality, retail accessible.</p>
+                <span class="tag tag--rose">Computation + AI Narration</span>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer class="footer">
+    <p>© 2025 RetireSIM.ai · Professional retirement planning with Monte Carlo simulation</p>
+    <p><a href="https://www.retiresim.ai" target="_blank">Simulator</a> · <a href="https://case-studies.retiresim.ai/">Case Studies</a> · <span style="color:var(--purple-300);">Architecture</span></p>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
