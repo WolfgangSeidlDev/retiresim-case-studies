@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monte Carlo Retirement Calculator — Singapore, Expats & Global | RetireSIM</title>
+<meta name="description" content="Free Monte Carlo retirement calculator built for Singapore (CPF), expats, and international investors. Stress-test your retirement plan across 10,000 market scenarios with multi-currency support.">
+<meta name="keywords" content="Monte Carlo retirement calculator, retirement calculator Singapore, CPF retirement planning tool, expat retirement calculator, FIRE calculator Singapore, retirement simulation, Monte Carlo simulation retirement, multi-currency retirement planner, stress test retirement plan, retirement planning tool non-US, early retirement calculator, sequence of returns risk calculator">
+<meta property="og:title" content="Monte Carlo Retirement Calculator — Singapore, Expats & Global">
+<meta property="og:description" content="Stop guessing. Stress-test your retirement plan across 10,000 market scenarios. Built for Singapore CPF, multi-currency portfolios, and international investors.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://case-studies.retiresim.ai/calculator.html">
+<meta property="og:image" content="https://case-studies.retiresim.ai/Success_Rate_Heatmap_Monte_Carlo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Monte Carlo Retirement Calculator — Singapore & Expats">
+<meta name="twitter:description" content="Free Monte Carlo retirement simulator. 10,000 scenarios. CPF, multi-currency, stress testing.">
+<link rel="canonical" href="https://case-studies.retiresim.ai/calculator.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"RetireSIM — Monte Carlo Retirement Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Monte Carlo retirement calculator for Singapore, expats, and international investors. Stress-test retirement plans across 10,000 market scenarios with CPF integration, multi-currency support, and AI-powered analysis.","url":"https://www.retiresim.ai","featureList":["Monte Carlo simulation with 10,000 scenarios","Singapore CPF Life integration","Multi-currency portfolio support","Student-t fat tail distributions","Stress testing and scenario analysis","AI-powered retirement report generation","Success rate heatmaps","Property and rental income modeling"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a Monte Carlo retirement calculator?","acceptedAnswer":{"@type":"Answer","text":"A Monte Carlo retirement calculator simulates thousands of possible market scenarios to estimate the probability of your retirement plan succeeding. Unlike traditional calculators that assume fixed returns, Monte Carlo simulation accounts for market volatility, sequence of returns risk, and fat-tail events — giving you a realistic success rate instead of a single misleading number."}},{"@type":"Question","name":"Is there a Monte Carlo retirement calculator for Singapore with CPF?","acceptedAnswer":{"@type":"Answer","text":"RetireSIM is built specifically for Singapore residents and expats. It integrates CPF Life pension payouts, supports SGD and multiple currencies, models property assets, and accounts for Singapore-specific retirement scenarios."}},{"@type":"Question","name":"Can I use this for FIRE planning?","acceptedAnswer":{"@type":"Answer","text":"Yes. RetireSIM handles long time horizons (30-50+ years), multiple income streams, property assets, rental income, and the specific risks that matter for early retirees — including sequence of returns risk."}},{"@type":"Question","name":"Is RetireSIM free?","acceptedAnswer":{"@type":"Answer","text":"The core Monte Carlo simulator is free with no signup required. Premium features including the success rate heatmap and AI-powered reports are available on paid plans."}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0a14;--bg-elevated:#13101f;--bg-card:#1a1528;--bg-card-hover:#211a33;--border:rgba(196,176,217,0.08);--border-hover:rgba(196,176,217,0.18);--purple-900:#2d1f4e;--purple-700:#4e3785;--purple-600:#63489e;--purple-500:#7b5cb5;--purple-400:#9a7dcb;--purple-300:#b9a0dc;--purple-200:#d1c0ea;--text-primary:#f0ecf5;--text-secondary:#a89bb8;--text-muted:#6e6280;--amber:#f0b545;--red:#ef6461;--green:#5fd4a0;--green-dim:rgba(95,212,160,0.12);--font-display:'Instrument Serif',Georgia,serif;--font-body:'Outfit',-apple-system,sans-serif;--max-w:820px;--max-w-wide:1100px;--radius:12px;--radius-lg:20px;--transition:0.3s cubic-bezier(0.25,0.46,0.45,0.94)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:var(--font-body);font-size:1rem;line-height:1.7;color:var(--text-secondary);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}::selection{background:var(--purple-600);color:var(--text-primary)}a{color:inherit}img{max-width:100%;height:auto;display:block}.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s ease,transform 0.7s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;transition:background 0.4s,backdrop-filter 0.4s}.nav.scrolled{background:rgba(12,10,20,0.82);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border)}.nav__inner{max-width:var(--max-w-wide);margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:72px}.nav__brand{display:flex;align-items:center;text-decoration:none;cursor:pointer}.nav__brand img{height:44px;width:auto}.nav-toggle{display:none;background:none;border:none;color:var(--text-secondary);font-size:1.3rem;cursor:pointer;padding:0.5rem}.nav__links{display:flex;align-items:center;gap:0.15rem;list-style:none}.nav__links a{display:block;padding:0.4rem 0.85rem;text-decoration:none;font-size:0.88rem;font-weight:400;color:var(--text-muted);border-radius:8px;transition:var(--transition)}.nav__links a:hover,.nav__links a.active{color:var(--text-primary);background:rgba(196,176,217,0.06)}.nav__cta{padding:0.5rem 1.15rem!important;background:var(--purple-600)!important;color:var(--text-primary)!important;font-weight:500!important;border-radius:8px!important;font-size:0.85rem!important;transition:var(--transition)}.nav__cta:hover{background:var(--purple-500)!important;transform:translateY(-1px);box-shadow:0 4px 20px rgba(123,92,181,0.25)}
+.hero{position:relative;padding:9rem 2rem 5rem;text-align:center;overflow:hidden}.hero::before{content:'';position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(123,92,181,0.14),transparent 70%);top:-300px;left:50%;transform:translateX(-50%);pointer-events:none}.hero__inner{max-width:700px;margin:0 auto;position:relative;z-index:1}.hero__tag{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:var(--purple-300);margin-bottom:1.5rem;background:rgba(123,92,181,0.1);padding:0.4rem 1rem;border-radius:100px}.hero h1{font-family:var(--font-display);font-size:clamp(2.4rem,5.5vw,3.8rem);line-height:1.1;color:var(--text-primary);margin-bottom:1.5rem;letter-spacing:-0.02em}.hero h1 em{font-style:italic;color:var(--purple-300)}.hero__sub{font-size:1.15rem;color:var(--text-secondary);max-width:560px;margin:0 auto 2.5rem;line-height:1.7}.hero__cta{display:inline-flex;align-items:center;gap:0.6rem;padding:1rem 2.2rem;background:var(--purple-600);color:var(--text-primary);text-decoration:none;border-radius:var(--radius);font-weight:600;font-size:1.05rem;transition:var(--transition)}.hero__cta:hover{background:var(--purple-500);transform:translateY(-2px);box-shadow:0 8px 30px rgba(123,92,181,0.3)}.hero__cta-sub{display:block;margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted)}
+.trust{max-width:var(--max-w);margin:-1rem auto 4rem;padding:0 2rem;display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;font-size:0.85rem;color:var(--text-muted)}.trust span{display:flex;align-items:center;gap:0.4rem}
+.problem{max-width:var(--max-w);margin:0 auto 5rem;padding:0 2rem}.problem__card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:3rem;position:relative;overflow:hidden}.problem__card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--amber),var(--green))}.problem__card h2{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--text-primary);margin-bottom:1.5rem;line-height:1.2}.problem__card p{margin-bottom:1.25rem;line-height:1.8;font-size:1.02rem}.problem__card p:last-child{margin-bottom:0}.problem__img{margin:2rem 0;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}.img-caption{font-size:0.82rem;color:var(--text-muted);font-style:italic;margin-top:0.5rem;text-align:center}
+.features{max-width:var(--max-w-wide);margin:0 auto 5rem;padding:0 2rem}.features h2{font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,2.5rem);color:var(--text-primary);text-align:center;margin-bottom:0.75rem}.features__sub{text-align:center;color:var(--text-secondary);margin-bottom:3rem;font-size:1.05rem}.features__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem}.feat{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;transition:var(--transition)}.feat:hover{border-color:var(--border-hover);background:var(--bg-card-hover);transform:translateY(-4px)}.feat__icon{font-size:1.8rem;margin-bottom:0.75rem}.feat h3{font-family:var(--font-display);font-size:1.25rem;color:var(--text-primary);margin-bottom:0.5rem}.feat p{font-size:0.92rem;line-height:1.65;color:var(--text-secondary)}
+.showcase{max-width:var(--max-w-wide);margin:0 auto 5rem;padding:0 2rem}.showcase__card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;text-align:center}.showcase__card h2{font-family:var(--font-display);font-size:clamp(1.5rem,3vw,2rem);color:var(--text-primary);margin-bottom:0.75rem}.showcase__card>p{color:var(--text-secondary);margin-bottom:2rem;font-size:1rem}.showcase__img{border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;border:1px solid var(--border)}
+.comparison{max-width:var(--max-w);margin:0 auto 5rem;padding:0 2rem}.comparison h2{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--text-primary);text-align:center;margin-bottom:2.5rem}.comp-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}.comp-table th,.comp-table td{padding:1rem 1.25rem;text-align:left;border-bottom:1px solid var(--border);font-size:0.9rem}.comp-table th{background:var(--bg-elevated);color:var(--text-muted);font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em}.comp-table td:first-child{color:var(--text-primary);font-weight:500}.comp-table .yes{color:var(--green);font-weight:600}.comp-table .no{color:var(--text-muted)}.comp-table tr:last-child td{border-bottom:none}
+.cases{max-width:var(--max-w-wide);margin:0 auto 5rem;padding:0 2rem}.cases h2{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--text-primary);text-align:center;margin-bottom:0.75rem}.cases__sub{text-align:center;color:var(--text-secondary);margin-bottom:2.5rem}.cases__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.25rem}.case-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;text-decoration:none;color:inherit;transition:var(--transition)}.case-card:hover{border-color:var(--border-hover);background:var(--bg-card-hover);transform:translateY(-4px)}.case-card__body{padding:1.75rem 2rem}.case-card__flag{font-size:1.4rem;margin-bottom:0.5rem;display:inline-block}.case-card h3{font-family:var(--font-display);font-size:1.3rem;color:var(--text-primary);margin-bottom:0.5rem}.case-card p{font-size:0.9rem;color:var(--text-secondary);line-height:1.6}.case-card__footer{padding:1rem 2rem;border-top:1px solid var(--border);font-size:0.85rem;color:var(--purple-400);font-weight:500;display:flex;justify-content:space-between;align-items:center}.case-card:hover .arrow{transform:translateX(5px)}.arrow{transition:var(--transition);display:inline-block}
+.faq{max-width:var(--max-w);margin:0 auto 5rem;padding:0 2rem}.faq h2{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--text-primary);text-align:center;margin-bottom:2.5rem}.faq__item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem 2rem;margin-bottom:1rem}.faq__item h3{font-family:var(--font-display);font-size:1.1rem;color:var(--text-primary);margin-bottom:0.75rem;line-height:1.3}.faq__item p{font-size:0.95rem;line-height:1.75;color:var(--text-secondary)}
+.bottom-cta{max-width:var(--max-w);margin:0 auto 4rem;padding:0 2rem}.bottom-cta__inner{background:linear-gradient(135deg,var(--purple-700),var(--purple-900));border:1px solid rgba(123,92,181,0.2);border-radius:var(--radius-lg);padding:3.5rem;text-align:center;position:relative;overflow:hidden}.bottom-cta__inner::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(123,92,181,0.15),transparent);top:-200px;right:-100px;pointer-events:none}.bottom-cta h2{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--text-primary);margin-bottom:0.75rem;position:relative}.bottom-cta__inner>p{color:var(--purple-200);margin-bottom:2rem;font-size:1.05rem;position:relative}.btn-lg{display:inline-flex;align-items:center;gap:0.6rem;padding:1rem 2.5rem;background:var(--text-primary);color:var(--bg);text-decoration:none;border-radius:var(--radius);font-weight:600;font-size:1.1rem;transition:var(--transition);position:relative}.btn-lg:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,236,245,0.15)}.btn-sub{display:block;margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted);position:relative}
+.footer{border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;font-size:0.85rem;color:var(--text-muted)}.footer a{color:var(--purple-400);text-decoration:none;transition:var(--transition)}.footer a:hover{color:var(--purple-300)}.footer p{margin:0.3rem 0}
+@media(max-width:768px){.nav__links{display:none}.nav__links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(12,10,20,0.95);backdrop-filter:blur(20px);padding:1rem;gap:0.5rem;border-bottom:1px solid var(--border)}.nav-toggle{display:block}.hero{padding:7rem 1.5rem 3.5rem}.hero h1{font-size:2rem}.trust{gap:1rem;font-size:0.8rem}.problem__card{padding:2rem}.features__grid,.cases__grid{grid-template-columns:1fr}.comp-table{font-size:0.82rem}.comp-table th,.comp-table td{padding:0.7rem 0.75rem}.bottom-cta__inner{padding:2.5rem 1.5rem}.showcase__card{padding:1.75rem}}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+    <div class="nav__inner">
+        <a href="index.html" class="nav__brand"><img src="RetireSIM Logo - A Thousand Paths.png" alt="RetireSIM — A Thousand Paths"></a>
+        <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav__links').classList.toggle('open')">☰</button>
+        <ul class="nav__links">
+            <li><a href="index.html">Case Studies</a></li>
+            <li><a href="nelson.html">🇸🇬 Nelson</a></li>
+            <li><a href="emma.html">🌍 Emma</a></li>
+            <li><a href="methodology.html">Methodology</a></li>
+            <li><a href="https://www.retiresim.ai?src=seo_calculator" class="nav__cta">Launch Calculator</a></li>
+        </ul>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero__inner">
+        <span class="hero__tag">Free · No Signup Required</span>
+        <h1>Monte Carlo Retirement Calculator for <em>Singapore & Expats</em></h1>
+        <p class="hero__sub">Stop trusting a single line on a chart. Stress‑test your retirement plan across 10,000 market scenarios — with CPF integration, multi‑currency support, and fat‑tail risk modeling.</p>
+        <a href="https://www.retiresim.ai?src=seo_calculator" class="hero__cta">Launch Free Calculator →</a>
+        <span class="hero__cta-sub">No signup · No credit card · Full Monte Carlo in 30 seconds</span>
+    </div>
+</section>
+
+<div class="trust reveal">
+    <span>🎲 10,000 Scenarios</span>
+    <span>🇸🇬 CPF Life Integration</span>
+    <span>🌐 Multi-Currency</span>
+    <span>📊 7 Asset Classes</span>
+    <span>🤖 AI-Powered Reports</span>
+</div>
+
+<div class="problem reveal">
+    <div class="problem__card">
+        <h2>Traditional retirement calculators <span style="color:var(--red)">lie to you</span></h2>
+        <p>Most retirement calculators — including those from DBS, OCBC, Standard Chartered, and major banks — assume your investments will grow at a fixed rate every year. They show you one smooth line going up. That's not how markets work.</p>
+        <p>In reality, markets crash, recover, stagnate, and surge unpredictably. A retiree who faces a bear market in their first two years of retirement has a fundamentally different outcome than one who gets the same average return but in a different order. This is called <strong style="color:var(--text-primary)">sequence of returns risk</strong> — and traditional calculators completely ignore it.</p>
+        <div class="problem__img">
+            <img src="Traditional_Calculator_vs_MC.png" alt="Traditional retirement calculator showing one smooth growth line versus Monte Carlo simulation revealing the wide fan of possible outcomes including crashes and booms" loading="lazy">
+        </div>
+        <p class="img-caption">Traditional calculators promise one smooth line. Reality is the wide cone of uncertainty Monte Carlo reveals.</p>
+        <p><strong style="color:var(--text-primary)">Monte Carlo simulation</strong> runs your plan through thousands of possible market scenarios and tells you the <em>probability</em> of your money lasting. Instead of "you'll be fine," you get "you have a 73% chance of not running out of money." That's a number you can actually make decisions with.</p>
+    </div>
+</div>
+
+<section class="features reveal">
+    <h2>Built for international retirement planning</h2>
+    <p class="features__sub">Most retirement tools assume you're American. RetireSIM assumes you're not.</p>
+    <div class="features__grid">
+        <div class="feat">
+            <div class="feat__icon">🇸🇬</div>
+            <h3>Singapore CPF Life</h3>
+            <p>Model CPF Life pension payouts, BRS/FRS/ERS options, and integration with your investment portfolio. Built-in Singapore retirement age and CPF payout schedules.</p>
+        </div>
+        <div class="feat">
+            <div class="feat__icon">🌐</div>
+            <h3>Multi-Currency Portfolios</h3>
+            <p>SGD, USD, EUR, GBP, AUD and more. Model currency risk and international diversification without converting everything to a single currency.</p>
+        </div>
+        <div class="feat">
+            <div class="feat__icon">🎲</div>
+            <h3>10,000 Monte Carlo Scenarios</h3>
+            <p>Student-t distributions that model fat tails — the severe market crashes that normal distributions say "shouldn't happen." Correlated returns across 7 asset classes.</p>
+        </div>
+        <div class="feat">
+            <div class="feat__icon">🏠</div>
+            <h3>Property & Rental Income</h3>
+            <p>Model investment properties, rental income streams, and property appreciation. Essential for Singapore investors with condo or HDB investments.</p>
+        </div>
+        <div class="feat">
+            <div class="feat__icon">🔥</div>
+            <h3>Crisis Stress Testing</h3>
+            <p>Inject a 2008 GFC or dot-com crash into any year of your plan. See exactly what happens when the worst-case scenario hits early in retirement.</p>
+        </div>
+        <div class="feat">
+            <div class="feat__icon">🤖</div>
+            <h3>AI-Powered Analysis</h3>
+            <p>Generate a personalised retirement report analysed by AI. Charts embedded contextually with written analysis of your specific risks and opportunities.</p>
+        </div>
+    </div>
+</section>
+
+<section class="showcase reveal">
+    <div class="showcase__card">
+        <h2>Find your safe withdrawal rate in seconds</h2>
+        <p>The success rate heatmap runs 605,000 Monte Carlo simulations to map every combination of withdrawal level and asset allocation — so you can see exactly where the safe zone is.</p>
+        <div class="showcase__img">
+            <img src="Success_Rate_Heatmap_Monte_Carlo.png" alt="RetireSIM portfolio success rate heatmap showing survival probability across different annual withdrawal rates and equity-bond allocation splits using Student-t fat-tail distributions" loading="lazy">
+        </div>
+        <p class="img-caption">Green = high survival probability. Red = high risk of running out. 605,000 simulations mapped in one view.</p>
+    </div>
+</section>
+
+<section class="comparison reveal">
+    <h2>How RetireSIM compares</h2>
+    <table class="comp-table">
+        <thead>
+            <tr><th>Feature</th><th>Bank Calculators</th><th>ProjectionLab</th><th>RetireSIM</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Monte Carlo simulation</td><td class="no">✗ Fixed rate only</td><td class="yes">✓</td><td class="yes">✓ 10,000 scenarios</td></tr>
+            <tr><td>Fat-tail distributions</td><td class="no">✗</td><td class="no">✗ Normal only</td><td class="yes">✓ Student-t</td></tr>
+            <tr><td>Singapore CPF integration</td><td class="no">✗ Generic</td><td class="no">✗ US-focused</td><td class="yes">✓ CPF Life built-in</td></tr>
+            <tr><td>Multi-currency</td><td class="no">✗ Single currency</td><td class="no">✗ USD only</td><td class="yes">✓ SGD, USD, EUR, GBP+</td></tr>
+            <tr><td>Crisis stress testing</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓ Historical + custom</td></tr>
+            <tr><td>Success rate heatmap</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓ 605K simulations</td></tr>
+            <tr><td>AI-powered reports</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓ Personalised analysis</td></tr>
+            <tr><td>Property / rental income</td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓ Multiple properties</td></tr>
+            <tr><td>Free tier</td><td class="yes">✓</td><td class="yes">✓ Limited</td><td class="yes">✓ Full MC, no signup</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="cases reveal">
+    <h2>See it in action</h2>
+    <p class="cases__sub">Real retirement plans stress-tested with Monte Carlo simulation.</p>
+    <div class="cases__grid">
+        <a href="nelson.html" class="case-card">
+            <div class="case-card__body">
+                <div class="case-card__flag">🇸🇬</div>
+                <h3>Nelson & Family — "Can We Retire at 55?"</h3>
+                <p>$450K portfolio, CPF Life, rental income, two children's education. The deterministic answer says yes. Monte Carlo reveals a hidden 20% risk of running out 9 years early.</p>
+            </div>
+            <div class="case-card__footer"><span>Read case study</span><span class="arrow">→</span></div>
+        </a>
+        <a href="emma.html" class="case-card">
+            <div class="case-card__body">
+                <div class="case-card__flag">🌍</div>
+                <h3>Emma Clark — Digital Nomad Chasing FIRE by 45</h3>
+                <p>Multi-currency portfolio, no pension safety net, 50+ year retirement horizon. Can a digital nomad really achieve financial independence?</p>
+            </div>
+            <div class="case-card__footer"><span>Read case study</span><span class="arrow">→</span></div>
+        </a>
+    </div>
+</section>
+
+<section class="faq reveal">
+    <h2>Frequently asked questions</h2>
+    <div class="faq__item">
+        <h3>What is a Monte Carlo retirement calculator?</h3>
+        <p>A Monte Carlo retirement calculator simulates thousands of possible market scenarios to estimate the probability of your retirement plan succeeding. Instead of assuming a fixed return every year, it generates random returns based on historical volatility and asset correlations — including crashes, booms, and stagnation. The result is a success rate: the percentage of scenarios where your money lasted the full planning horizon.</p>
+    </div>
+    <div class="faq__item">
+        <h3>Is there a Monte Carlo retirement calculator for Singapore with CPF?</h3>
+        <p>RetireSIM is built specifically for Singapore residents and expats. It integrates CPF Life pension payouts, supports SGD and multiple currencies, models HDB and investment property assets, and handles Singapore-specific retirement scenarios. Most retirement calculators on the market are designed around US Social Security and Roth IRAs — RetireSIM is built for everyone else.</p>
+    </div>
+    <div class="faq__item">
+        <h3>Why does RetireSIM use Student-t distributions?</h3>
+        <p>Normal (Gaussian) distributions underestimate the frequency of extreme market events. Real markets crash more often and more severely than a bell curve predicts. Student-t distributions have heavier tails, capturing fat-tail risk more accurately. Each asset class gets its own tail parameter — equities have fatter tails than bonds, matching observed behaviour. <a href="methodology.html" style="color:var(--purple-400)">Read the full methodology →</a></p>
+    </div>
+    <div class="faq__item">
+        <h3>Can I use this for FIRE planning?</h3>
+        <p>Yes. RetireSIM handles long time horizons (30–50+ years), multiple income streams, property assets, rental income, and phased retirement scenarios. It's particularly useful for FIRE planning because it models sequence of returns risk — the specific danger that early retirees face if a market crash hits in the first years after leaving work.</p>
+    </div>
+    <div class="faq__item">
+        <h3>Is RetireSIM free?</h3>
+        <p>The core Monte Carlo simulator is free with no signup required. You can run full simulations, view percentile curves, and test crisis scenarios. Premium features including the 605,000-simulation success rate heatmap and AI-powered retirement reports are available on paid plans.</p>
+    </div>
+</section>
+
+<section class="bottom-cta reveal">
+    <div class="bottom-cta__inner">
+        <h2>Stop guessing. Start simulating.</h2>
+        <p>Run your first Monte Carlo retirement simulation in 30 seconds. Free, no signup, no credit card.</p>
+        <a href="https://www.retiresim.ai?src=seo_calculator" class="btn-lg">Launch Free Calculator →</a>
+        <span class="btn-sub">Built by a Financial Risk Manager (FRM) · Institutional-grade methodology</span>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>© 2025–2026 RetireSIM.ai · Professional retirement planning with Monte Carlo simulation</p>
+    <p><a href="https://www.retiresim.ai?src=seo_calculator">Simulator</a> · <a href="index.html">Case Studies</a> · <a href="methodology.html">Methodology</a></p>
+    <p style="margin-top:0.5rem;font-size:0.78rem">RetireSIM does not provide financial advice. Simulated outcomes do not guarantee future results.</p>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target)}})},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40)},{passive:true});
+</script>
+</body>
+</html>

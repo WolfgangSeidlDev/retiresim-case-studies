@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How RetireSIM Works — Monte Carlo Simulation Methodology for Retirement Planning</title>
+<meta name="description" content="How RetireSIM stress-tests retirement plans: Student-t fat-tail distributions, correlated multi-asset returns, sequence of returns risk modeling, and 10,000 Monte Carlo scenarios. Built by a Financial Risk Manager (FRM).">
+<meta name="keywords" content="Monte Carlo simulation methodology, retirement planning Monte Carlo, Student-t distribution retirement, sequence of returns risk, fat tail distributions, retirement calculator methodology, how Monte Carlo retirement works, parametric simulation retirement, CPF retirement simulation, multi-asset correlation retirement">
+
+<!-- Open Graph -->
+<meta property="og:title" content="How RetireSIM Works — Monte Carlo Simulation Methodology">
+<meta property="og:description" content="Student-t distributions, correlated returns, sequence of returns risk. The institutional-grade methodology behind RetireSIM's retirement planning engine.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://case-studies.retiresim.ai/methodology.html">
+<meta property="og:image" content="https://case-studies.retiresim.ai/Success_Rate_Heatmap_Monte_Carlo.png">
+
+<link rel="canonical" href="https://case-studies.retiresim.ai/methodology.html">
+
+<!-- FAQ Schema for key methodology questions -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does RetireSIM use Student-t distributions instead of normal distributions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Normal (Gaussian) distributions underestimate the frequency of extreme market events. Real markets experience crashes and booms far more often than a bell curve predicts. Student-t distributions have heavier tails, capturing fat-tail risk more realistically. RetireSIM assigns different tail parameters to different asset classes — equities get fatter tails than bonds, reflecting observed market behaviour."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is sequence of returns risk and why does it matter for retirement?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sequence of returns risk is the danger that poor market returns early in retirement permanently damage your portfolio's ability to sustain withdrawals. Two retirees with identical average returns over 30 years can have completely different outcomes depending on when the bad years hit. Traditional calculators ignore this risk entirely. Monte Carlo simulation captures it by running thousands of scenarios with different return sequences."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many simulations does RetireSIM run?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "RetireSIM runs 5,000 simulations per scenario by default. The heatmap analysis runs 5,000 simulations across each of 121 withdrawal/allocation combinations, totalling 605,000 simulations. This provides statistically robust results for retirement planning decisions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does RetireSIM account for asset correlations?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. RetireSIM generates correlated multi-asset returns using a 7×7 covariance matrix covering equities, bonds, REITs, precious metals, crypto, real estate, and cash. The default matrix captures key relationships — equities and REITs are highly correlated, equities and bonds are uncorrelated — and all correlations are user-configurable."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- Article Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "How RetireSIM Works — Monte Carlo Simulation Methodology",
+  "description": "Technical methodology reference for RetireSIM's Monte Carlo retirement planning engine",
+  "author": {
+    "@type": "Organization",
+    "name": "RetireSIM"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "RetireSIM",
+    "url": "https://retiresim.ai"
+  },
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "RetireSIM"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #0c0a14;
+    --bg-elevated: #13101f;
+    --bg-card: #1a1528;
+    --bg-card-hover: #211a33;
+    --border: rgba(196,176,217,0.08);
+    --border-hover: rgba(196,176,217,0.18);
+    --purple-900: #2d1f4e;
+    --purple-700: #4e3785;
+    --purple-600: #63489e;
+    --purple-500: #7b5cb5;
+    --purple-400: #9a7dcb;
+    --purple-300: #b9a0dc;
+    --purple-200: #d1c0ea;
+    --purple-100: #e8ddf4;
+    --text-primary: #f0ecf5;
+    --text-secondary: #a89bb8;
+    --text-muted: #6e6280;
+    --amber: #f0b545;
+    --amber-dim: rgba(240,181,69,0.12);
+    --red: #ef6461;
+    --red-dim: rgba(239,100,97,0.12);
+    --green: #5fd4a0;
+    --green-dim: rgba(95,212,160,0.12);
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-body: 'Outfit', -apple-system, sans-serif;
+    --max-w: 820px;
+    --radius: 12px;
+    --radius-lg: 20px;
+    --transition: 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    --max-w-wide: 1100px;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);font-size:1rem;line-height:1.7;color:var(--text-secondary);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--purple-600);color:var(--text-primary)}
+a{color:inherit}
+img{max-width:100%;height:auto;display:block}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* Nav - matching existing site */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;transition:background 0.4s,backdrop-filter 0.4s}
+.nav.scrolled{background:rgba(12,10,20,0.82);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border)}
+.nav__inner{max-width:var(--max-w-wide);margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:72px}
+.nav__brand{display:flex;align-items:center;text-decoration:none;cursor:pointer}
+.nav__brand img{height:44px;width:auto}
+.nav-toggle{display:none;background:none;border:none;color:var(--text-secondary);font-size:1.3rem;cursor:pointer;padding:0.5rem}
+.nav__links{display:flex;align-items:center;gap:0.15rem;list-style:none}
+.nav__links a{display:block;padding:0.4rem 0.85rem;text-decoration:none;font-size:0.88rem;font-weight:400;color:var(--text-muted);border-radius:8px;transition:var(--transition)}
+.nav__links a:hover,.nav__links a.active{color:var(--text-primary);background:rgba(196,176,217,0.06)}
+.nav__cta{padding:0.5rem 1.15rem!important;background:var(--purple-600)!important;color:var(--text-primary)!important;font-weight:500!important;border-radius:8px!important;font-size:0.85rem!important;transition:var(--transition)}
+.nav__cta:hover{background:var(--purple-500)!important;transform:translateY(-1px);box-shadow:0 4px 20px rgba(123,92,181,0.25)}
+
+/* Hero */
+.hero{position:relative;padding:9rem 2rem 5rem;overflow:hidden}
+.hero::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(123,92,181,0.12),transparent 70%);top:-200px;right:-150px;pointer-events:none}
+.hero__inner{max-width:var(--max-w);margin:0 auto;position:relative;z-index:1}
+.hero__tag{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.78rem;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:var(--purple-300);margin-bottom:1.5rem}
+.hero__tag::before{content:'';width:32px;height:1px;background:var(--purple-400)}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.4rem,5.5vw,3.6rem);line-height:1.1;color:var(--text-primary);margin-bottom:1.5rem;letter-spacing:-0.02em;max-width:650px}
+.hero h1 em{font-style:italic;color:var(--purple-300)}
+.hero__sub{font-size:1.1rem;color:var(--text-secondary);max-width:560px;line-height:1.7}
+.hero__cred{font-size:0.82rem;color:var(--text-muted);margin-top:1.5rem}
+
+/* Content sections */
+.content{max-width:var(--max-w);margin:0 auto;padding:0 2rem 5rem}
+.section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem 3rem;margin-bottom:1.75rem}
+.section__label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--purple-400);margin-bottom:0.75rem}
+.section h2{font-family:var(--font-display);font-size:1.6rem;color:var(--text-primary);margin-bottom:1.25rem;line-height:1.25}
+.section h3{font-family:var(--font-display);font-size:1.25rem;color:var(--text-primary);margin-bottom:0.75rem;line-height:1.3;margin-top:1.5rem}
+.section p{margin-bottom:1rem}
+.section p:last-child{margin-bottom:0}
+.section ul{list-style:none;margin:0.75rem 0 0}
+.section li{position:relative;padding-left:1.5rem;margin-bottom:0.85rem;line-height:1.7}
+.section li::before{content:'';position:absolute;left:0;top:0.65em;width:5px;height:5px;background:var(--purple-500);border-radius:50%}
+.section li strong{color:var(--text-primary)}
+
+/* Special boxes */
+.formula{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.75rem;margin:1.25rem 0;font-family:'Courier New',monospace;font-size:0.92rem;color:var(--purple-200);overflow-x:auto}
+.note{background:rgba(123,92,181,0.06);border-left:3px solid var(--purple-500);border-radius:0 var(--radius) var(--radius) 0;padding:1.25rem 1.5rem;margin:1.5rem 0;font-size:0.92rem}
+.note strong{color:var(--purple-300)}
+.highlight-box{background:var(--amber-dim);border-left:4px solid var(--amber);border-radius:0 var(--radius) var(--radius) 0;padding:1.25rem 1.5rem;margin:1.5rem 0}
+.highlight-box strong{color:var(--amber)}
+
+/* Data table */
+.data-table{width:100%;border-collapse:separate;border-spacing:0;margin:1.25rem 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.data-table th,.data-table td{padding:0.75rem 1.25rem;text-align:left;border-bottom:1px solid var(--border);font-size:0.88rem}
+.data-table th{background:var(--bg-elevated);color:var(--text-muted);font-weight:600;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em}
+.data-table td{color:var(--text-secondary)}
+.data-table td:first-child{color:var(--text-primary);font-weight:500}
+.data-table tr:last-child td{border-bottom:none}
+
+/* Image */
+.section-img{border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin:1.5rem 0}
+.section-img img{width:100%;display:block}
+.img-caption{font-size:0.82rem;color:var(--text-muted);font-style:italic;margin-top:0.5rem;text-align:center}
+
+/* Step indicators */
+.step{display:flex;gap:1rem;margin:1.25rem 0;align-items:flex-start}
+.step__num{flex-shrink:0;width:32px;height:32px;background:var(--purple-600);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:600;color:var(--text-primary);margin-top:0.1rem}
+.step__content{flex:1}
+.step__content strong{color:var(--text-primary);display:block;margin-bottom:0.25rem}
+
+/* Bottom CTA */
+.bottom-cta{max-width:var(--max-w);margin:0 auto 4rem;padding:0 2rem}
+.bottom-cta__inner{background:linear-gradient(135deg,var(--purple-700),var(--purple-900));border:1px solid rgba(123,92,181,0.2);border-radius:var(--radius-lg);padding:3.5rem;text-align:center;position:relative;overflow:hidden}
+.bottom-cta__inner::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(123,92,181,0.15),transparent);top:-200px;right:-100px;pointer-events:none}
+.bottom-cta h2{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--text-primary);margin-bottom:0.75rem;position:relative}
+.bottom-cta__inner>p{color:var(--purple-200);margin-bottom:2rem;font-size:1.05rem;position:relative}
+.btn-lg{display:inline-flex;align-items:center;gap:0.6rem;padding:1rem 2.5rem;background:var(--text-primary);color:var(--bg);text-decoration:none;border-radius:var(--radius);font-weight:600;font-size:1.1rem;transition:var(--transition);position:relative}
+.btn-lg:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,236,245,0.15)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;font-size:0.85rem;color:var(--text-muted)}
+.footer a{color:var(--purple-400);text-decoration:none;transition:var(--transition)}
+.footer a:hover{color:var(--purple-300)}
+.footer p{margin:0.3rem 0}
+
+/* Mobile */
+@media(max-width:768px){
+    .nav__links{display:none}.nav__links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(12,10,20,0.95);backdrop-filter:blur(20px);padding:1rem;gap:0.5rem;border-bottom:1px solid var(--border)}
+    .nav-toggle{display:block}
+    .hero{padding:7rem 1.5rem 3.5rem}
+    .hero h1{font-size:2rem}
+    .section{padding:1.75rem 1.5rem}
+    .data-table{font-size:0.8rem}
+    .data-table th,.data-table td{padding:0.5rem 0.75rem}
+    .bottom-cta__inner{padding:2.5rem 1.5rem}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="nav" id="nav">
+    <div class="nav__inner">
+        <a href="index.html" class="nav__brand"><img src="RetireSIM Logo - A Thousand Paths.png" alt="RetireSIM — A Thousand Paths"></a>
+        <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav__links').classList.toggle('open')">☰</button>
+        <ul class="nav__links">
+            <li><a href="index.html">Case Studies</a></li>
+            <li><a href="nelson.html">🇸🇬 Nelson</a></li>
+            <li><a href="emma.html">🌍 Emma</a></li>
+            <li><a href="methodology.html" class="active">Methodology</a></li>
+            <li><a href="https://www.retiresim.ai?src=methodology" class="nav__cta">Launch Simulator</a></li>
+        </ul>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero__inner">
+        <span class="hero__tag"><span></span>Methodology Reference</span>
+        <h1>How RetireSIM <em>stress‑tests</em> your retirement plan</h1>
+        <p class="hero__sub">Most retirement calculators assume markets grow at a steady rate. RetireSIM generates thousands of realistic scenarios — including crashes, booms, and stagnation — to show you the <strong style="color:var(--text-primary)">probability</strong> of your plan succeeding.</p>
+        <p class="hero__cred">Built by a Financial Risk Manager (FRM) using institutional-grade quantitative methods.</p>
+    </div>
+</section>
+
+
+<div class="content">
+
+    <!-- OVERVIEW -->
+    <article class="section reveal">
+        <div class="section__label">Overview</div>
+        <h2>Monte Carlo simulation for retirement planning</h2>
+        <p>Monte Carlo simulation is the gold standard methodology used by institutional investors, pension funds, and financial risk managers to model uncertainty. Instead of projecting a single "expected" outcome, it generates thousands of possible futures and measures how often your plan survives.</p>
+
+        <p>Each simulation run follows the same five-step logic:</p>
+
+        <div class="step"><div class="step__num">1</div><div class="step__content"><strong>Generate random market returns</strong>For each year of your planning horizon, generate realistic returns for every asset class — respecting how assets move together (correlations) and how volatile each one is.</div></div>
+        <div class="step"><div class="step__num">2</div><div class="step__content"><strong>Calculate annual cash flows</strong>For each year: portfolio growth, income (pensions, rental), taxes, withdrawals, and expenses.</div></div>
+        <div class="step"><div class="step__num">3</div><div class="step__content"><strong>Carry the balance forward</strong>End-of-year balance becomes next year's starting balance.</div></div>
+        <div class="step"><div class="step__num">4</div><div class="step__content"><strong>Track portfolio survival</strong>Record whether and when the portfolio runs out of money.</div></div>
+        <div class="step"><div class="step__num">5</div><div class="step__content"><strong>Repeat thousands of times</strong>5,000 iterations by default. Build a probability distribution of outcomes.</div></div>
+
+        <p>The result is not "you'll have $1.2M at age 80." The result is "there's a 73% chance your money lasts to 85, and a 12% chance you run out by 76."</p>
+    </article>
+
+    <!-- RETURN GENERATION -->
+    <article class="section reveal">
+        <div class="section__label">Return Generation</div>
+        <h2>Why we use Student-t distributions (not normal)</h2>
+        <p>Most retirement calculators assume investment returns follow a <strong style="color:var(--text-primary)">normal (Gaussian) distribution</strong> — the classic bell curve. This assumption is dangerous for retirement planning because it systematically underestimates the frequency of extreme market events.</p>
+
+        <p>Real markets crash more often and more severely than a bell curve predicts. The 2008 Global Financial Crisis, the dot-com bust, the COVID crash — these are events that a normal distribution considers nearly impossible, yet they happen roughly once per decade.</p>
+
+        <p>RetireSIM defaults to the <strong style="color:var(--text-primary)">Student-t distribution</strong>, which has heavier tails. The key parameter is ν (nu) — the degrees of freedom — which controls how "fat" the tails are:</p>
+
+        <table class="data-table">
+            <thead><tr><th>ν Range</th><th>Tail Behaviour</th><th>Typical Use</th></tr></thead>
+            <tbody>
+                <tr><td>5–7</td><td>Very fat tails (frequent extreme events)</td><td>Individual stocks, crypto</td></tr>
+                <tr><td>10–15</td><td>Moderately fat tails</td><td>Equity indices</td></tr>
+                <tr><td>30+</td><td>Approaching normal distribution</td><td>Stable bonds</td></tr>
+            </tbody>
+        </table>
+
+        <p>Each asset class has its own ν value, so equities can have fatter tails than bonds — reflecting observed market behaviour. Users can configure these parameters or use the calibrated defaults.</p>
+
+        <div class="section-img">
+            <img src="Traditional_Calculator_vs_MC.png" alt="Comparison of traditional calculator output showing a single smooth growth line versus Monte Carlo simulation showing the wide fan of possible outcomes including crashes" loading="lazy">
+        </div>
+        <p class="img-caption">Traditional calculators show one smooth line. Monte Carlo reveals the full range of possible outcomes.</p>
+    </article>
+
+    <!-- CORRELATED RETURNS -->
+    <article class="section reveal">
+        <div class="section__label">Multi-Asset Modelling</div>
+        <h2>Correlated returns across 7 asset classes</h2>
+        <p>Real assets don't move independently. When equities crash, REITs tend to fall too. Bonds often hold steady or rise. Precious metals provide mild diversification. Ignoring these correlations produces misleading results — either too optimistic (if you assume all assets diversify perfectly) or too pessimistic (if you model crashes in isolation).</p>
+
+        <p>RetireSIM models returns across seven asset classes simultaneously using a full covariance matrix:</p>
+
+        <table class="data-table">
+            <thead><tr><th>Asset Class</th><th>Role in Portfolio</th></tr></thead>
+            <tbody>
+                <tr><td>Equities</td><td>Growth engine, highest volatility</td></tr>
+                <tr><td>Bonds</td><td>Stability, low correlation to equities</td></tr>
+                <tr><td>REITs</td><td>Income-producing, correlated with equities (0.7)</td></tr>
+                <tr><td>Precious Metals</td><td>Crisis hedge, mild diversification (0.1 with equities)</td></tr>
+                <tr><td>Crypto</td><td>High growth potential, very fat tails</td></tr>
+                <tr><td>Real Estate</td><td>Illiquid, property appreciation and rental income</td></tr>
+                <tr><td>Cash</td><td>Minimal volatility, liquidity buffer</td></tr>
+            </tbody>
+        </table>
+
+        <p>All correlations are user-configurable. The default matrix is calibrated to observed market relationships, but users who believe correlations will change (for example, in a rising rate environment) can adjust them.</p>
+
+        <h3>Volatility drag correction</h3>
+        <p>Over time, volatility reduces your compound (geometric) returns even if your average (arithmetic) return stays the same. This is a mathematical certainty, not an assumption:</p>
+
+        <div class="formula">Geometric Mean ≈ Arithmetic Mean − (Portfolio Variance / 2)</div>
+
+        <p>RetireSIM applies this correction at the portfolio level (accounting for diversification benefits from correlations), then adds asset-specific refinements for highly volatile assets. This two-layer approach is more accurate than applying drag per-asset independently, because diversification genuinely reduces portfolio variance.</p>
+    </article>
+
+    <!-- MEAN REVERSION -->
+    <article class="section reveal">
+        <div class="section__label">Advanced Modelling</div>
+        <h2>Mean reversion (Ornstein-Uhlenbeck process)</h2>
+        <p>Markets don't follow a pure random walk over long horizons. Empirical evidence shows that periods of extreme over- or under-performance tend to partially reverse. After a prolonged bull market, expected forward returns are typically lower. After a crash, expected returns are typically higher.</p>
+
+        <p>RetireSIM optionally models this using the Ornstein-Uhlenbeck mean reversion process:</p>
+
+        <div class="formula">Adjusted Return[t] = Random Return[t] + θ × (μ − Previous Return[t−1]) × Δt</div>
+
+        <p>Where θ (theta) is the mean reversion speed: 0 means pure random walk, 0.1–0.3 is mild reversion, and 0.5+ is strong reversion. Each asset class can have its own reversion speed.</p>
+
+        <div class="note"><strong>Why this matters:</strong> Without mean reversion, long-horizon simulations can produce unrealistically extreme outcomes — scenarios where equities return 30% per year for a decade, or crash for 15 consecutive years. Mean reversion makes long-term projections more realistic without reducing short-term volatility.</div>
+    </article>
+
+    <!-- YEAR-BY-YEAR LOOP -->
+    <article class="section reveal">
+        <div class="section__label">The Core Engine</div>
+        <h2>Year-by-year simulation loop</h2>
+        <p>For each of the 5,000 simulation iterations, for each year of the planning horizon, the engine executes these calculations in order:</p>
+
+        <h3>1. Investment returns</h3>
+        <p>The portfolio return is calculated as the weighted sum of all asset class returns based on the current allocation. Capital gains and income (dividends, bond coupons) are computed separately.</p>
+
+        <h3>2. Taxes</h3>
+        <p>Capital gains tax is applied to positive gains only. Income tax is applied to income yield. This is a deliberate simplification — real tax systems have loss carry-forward rules, but modelling this across thousands of simulations adds complexity with marginal impact on long-term projections.</p>
+
+        <h3>3. Cash flows</h3>
+        <p>Four types of cash flows are calculated for each year, each with independent growth rates and timing:</p>
+        <table class="data-table">
+            <thead><tr><th>Type</th><th>Examples</th><th>Growth</th></tr></thead>
+            <tbody>
+                <tr><td>Annuity / Income</td><td>CPF Life, rental income, pensions</td><td>User-defined rate per stream</td></tr>
+                <tr><td>Recurring Expenses</td><td>Living costs, insurance, healthcare</td><td>User-defined rate (or inflation)</td></tr>
+                <tr><td>One-Time Inflows</td><td>Inheritance, property sale</td><td>None (lump sum)</td></tr>
+                <tr><td>One-Time Outflows</td><td>Property purchase, wedding</td><td>None (lump sum)</td></tr>
+            </tbody>
+        </table>
+
+        <h3>4. End-of-year balance</h3>
+
+        <div class="highlight-box"><strong>Key design decision:</strong> During the withdrawal phase, annuity inflows (pensions, rental income) offset the required portfolio withdrawal. If your pension covers $20,000 of a $48,000 annual expense, only $28,000 needs to come from the portfolio. This is why adding income streams — like CPF Life — dramatically improves success rates.</div>
+
+        <p>If the end-of-year balance falls below zero, it stays at zero. The simulation does not model debt or negative balances. The year of depletion is recorded for the success rate calculation.</p>
+    </article>
+
+    <!-- SEQUENCE OF RETURNS -->
+    <article class="section reveal">
+        <div class="section__label">The Hidden Risk</div>
+        <h2>Sequence of returns risk</h2>
+        <p>This is arguably the most important risk that traditional retirement calculators completely ignore.</p>
+
+        <p>Consider two retirees who both achieve an average 7% return over 30 years. Retiree A gets strong returns in the first five years, then a crash in year six. Retiree B gets a crash in year one, then strong returns after. Despite having the same <em>average</em> return, Retiree B's portfolio may be depleted decades earlier — because early losses are amplified by ongoing withdrawals.</p>
+
+        <div class="section-img">
+            <img src="Deterministic_Nelson.png" alt="Deterministic retirement projection showing a single declining portfolio line — this is what traditional calculators show, hiding the uncertainty" loading="lazy">
+        </div>
+        <p class="img-caption">A traditional calculator shows one smooth declining line. It tells you nothing about the range of possible outcomes.</p>
+
+        <p>Monte Carlo simulation captures this risk naturally. Each of the 5,000 iterations generates a different sequence of returns, so the model reveals how vulnerable a plan is to early bad years. This is why the success rate — the percentage of scenarios where your money lasts — is a far more useful metric than a single projected balance.</p>
+    </article>
+
+    <!-- STRESS TESTING -->
+    <article class="section reveal">
+        <div class="section__label">Crisis Scenarios</div>
+        <h2>Historical stress testing</h2>
+        <p>Beyond random Monte Carlo scenarios, RetireSIM allows you to inject a specific historical or custom market crash into any year of your plan. When a crisis scenario is active, all random returns for that year are replaced with the deterministic crisis returns across every simulation.</p>
+
+        <p>This answers concrete questions like: "What happens to my plan if a 2008-style crash hits in year 3 of retirement?"</p>
+
+        <p>Available presets include historical crashes (2008 GFC, 2000 dot-com bust, and others), each with per-asset return overrides. The crash is guaranteed to happen in every simulation — all other years remain random. This shows the combined impact of a known shock plus ongoing market uncertainty.</p>
+    </article>
+
+    <!-- HEATMAP -->
+    <article class="section reveal">
+        <div class="section__label">Optimisation</div>
+        <h2>Success rate heatmap analysis</h2>
+        <p>The heatmap is one of RetireSIM's most powerful features. It runs the full Monte Carlo simulation across a grid of 121 combinations of withdrawal level and asset allocation:</p>
+
+        <table class="data-table">
+            <thead><tr><th>Dimension</th><th>Range</th><th>Steps</th></tr></thead>
+            <tbody>
+                <tr><td>Withdrawal Level</td><td>−25% to +25% of baseline</td><td>11 (5% increments)</td></tr>
+                <tr><td>Asset Allocation</td><td>0/100 to 100/0 equity/bonds</td><td>11 (10% increments)</td></tr>
+            </tbody>
+        </table>
+
+        <p>Each cell runs 5,000 simulations, for a total of <strong style="color:var(--text-primary)">605,000 simulations</strong>. The result is a colour-coded map showing the success rate for every combination — making it immediately visible where the safe zone is and how quickly risk escalates.</p>
+
+        <div class="section-img">
+            <img src="Success_Rate_Heatmap_Monte_Carlo.png" alt="RetireSIM success rate heatmap showing portfolio survival probability across different withdrawal rates and equity/bond allocations using Student-t distributions" loading="lazy">
+        </div>
+        <p class="img-caption">The heatmap runs 605,000 Monte Carlo simulations to map success rates across withdrawal levels and equity/bond splits.</p>
+
+        <div class="note"><strong>Design choice:</strong> The heatmap varies only the equity/bond split. Other asset classes (REITs, precious metals, crypto, real estate, cash) remain fixed at their configured allocations. A 7-dimensional optimisation would be computationally prohibitive and impossible to visualise meaningfully. Since the equity/bond split is the primary risk lever for most retirement portfolios, this 2D approach captures the most important trade-off.</div>
+    </article>
+
+    <!-- OUTPUT METRICS -->
+    <article class="section reveal">
+        <div class="section__label">Results</div>
+        <h2>Output metrics</h2>
+
+        <table class="data-table">
+            <thead><tr><th>Metric</th><th>What It Tells You</th></tr></thead>
+            <tbody>
+                <tr><td>Success Rate</td><td>Percentage of simulations where your portfolio lasts the full planning horizon</td></tr>
+                <tr><td>Percentile Curves</td><td>Portfolio balance at the 5th, 10th, 25th, 50th, 75th, 90th, and 95th percentiles per year</td></tr>
+                <tr><td>Depletion Probability</td><td>Percentage of simulations where the portfolio hit zero</td></tr>
+                <tr><td>Average Depletion Year</td><td>Among depleted simulations, the average year when money ran out</td></tr>
+                <tr><td>Cash Flow Survival</td><td>Year-by-year income breakdown, colour-coded by portfolio survival probability</td></tr>
+            </tbody>
+        </table>
+
+        <div class="section-img">
+            <img src="CS1.png" alt="RetireSIM Monte Carlo percentile curves showing the fan of possible portfolio outcomes over a 30-year retirement horizon with income stream breakdown and survival analysis" loading="lazy">
+        </div>
+        <p class="img-caption">Percentile curves show the full range of outcomes. The cash flow survival chart reveals when income streams are most critical.</p>
+    </article>
+
+    <!-- ASSUMPTIONS -->
+    <article class="section reveal">
+        <div class="section__label">Transparency</div>
+        <h2>Assumptions and limitations</h2>
+
+        <h3>What the model captures well</h3>
+        <ul>
+            <li>Range of possible outcomes under market uncertainty</li>
+            <li>Impact of asset allocation on risk/return trade-offs</li>
+            <li><strong>Sequence of returns risk</strong> — the danger of early bad years in retirement</li>
+            <li>Effect of income streams (pensions, CPF Life, rental) on portfolio sustainability</li>
+            <li>Inflation compounding on expenses over decades</li>
+            <li>Fat-tail market events via Student-t distributions</li>
+            <li>Mean reversion tendencies via Ornstein-Uhlenbeck process</li>
+        </ul>
+
+        <h3>What the model simplifies</h3>
+        <ul>
+            <li><strong>Perfect annual rebalancing</strong> — each year, the target allocation is applied. Portfolios that are never rebalanced would experience allocation drift.</li>
+            <li><strong>Static correlations</strong> — correlations are fixed. In reality, correlations increase during crises (everything falls together).</li>
+            <li><strong>Simple tax model</strong> — no loss carry-forward, no short-term vs. long-term distinction, no tax-lot tracking.</li>
+            <li><strong>No withdrawal sequencing</strong> — the model does not optimise which account type to withdraw from first.</li>
+            <li><strong>Annual granularity</strong> — all calculations are annual. Intra-year movements and monthly cash flow timing are not modelled.</li>
+            <li><strong>No mortality modelling</strong> — the planning horizon is fixed; life expectancy distributions are not incorporated.</li>
+        </ul>
+    </article>
+
+    <!-- TECHNICAL -->
+    <article class="section reveal">
+        <div class="section__label">Technical Implementation</div>
+        <h2>Under the hood</h2>
+
+        <table class="data-table">
+            <thead><tr><th>Component</th><th>Detail</th></tr></thead>
+            <tbody>
+                <tr><td>Engine</td><td>Python with NumPy vectorisation; optional Numba JIT for 2–5× speedup</td></tr>
+                <tr><td>Default Iterations</td><td>5,000 per simulation (configurable)</td></tr>
+                <tr><td>Heatmap Scale</td><td>5,000 per cell × 121 cells = 605,000 total</td></tr>
+                <tr><td>Distribution</td><td>Multivariate Student-t (default) or multivariate normal</td></tr>
+                <tr><td>Mean Reversion</td><td>Ornstein-Uhlenbeck process (optional, per asset)</td></tr>
+                <tr><td>Asset Classes</td><td>7: Equities, Bonds, REITs, Precious Metals, Crypto, Real Estate, Cash</td></tr>
+                <tr><td>Correlation Matrix</td><td>7×7, fully user-configurable</td></tr>
+                <tr><td>Data Storage</td><td>PostgreSQL with Fernet encryption at rest</td></tr>
+                <tr><td>AI Reports</td><td>Claude-powered analysis with inline chart injection</td></tr>
+            </tbody>
+        </table>
+    </article>
+
+</div>
+
+<!-- CTA -->
+<section class="bottom-cta reveal">
+    <div class="bottom-cta__inner">
+        <h2>Test your own retirement plan</h2>
+        <p>Stop relying on single-line projections. See the full range of outcomes with institutional-grade Monte Carlo simulation.</p>
+        <a href="https://www.retiresim.ai?src=methodology" class="btn-lg">Launch Free Simulator →</a>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>© 2025–2026 RetireSIM.ai · Professional retirement planning with Monte Carlo simulation</p>
+    <p><a href="https://www.retiresim.ai?src=methodology">Simulator</a> · <a href="index.html">Case Studies</a> · <a href="methodology.html">Methodology</a></p>
+    <p style="margin-top:0.5rem;font-size:0.78rem">This document describes the methodology of the RetireSim simulation engine for educational and transparency purposes. It does not constitute financial advice. Simulated outcomes do not guarantee future results.</p>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target)}})},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40)},{passive:true});
+</script>
+</body>
+</html>
